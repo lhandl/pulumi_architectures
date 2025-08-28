@@ -1,18 +1,32 @@
 runtime: yaml
 name: lhandl-architectures
 
-packages:
-  lhandl-test:
-    source: ../lhandl-test
-    version: 0.0.1
-
 components:
   Architecture:
-    # No inputs for now
+    inputProperties:
+      who:
+        type: string
+        description: Optional name to greet
     resources:
-      hello:
-        # Instantiate the Python component from lhandl-test
-        type: lhandl-test:index:HelloWorld
+      # 1) Declare a provider instance for the Python component plugin
+      helloProv:
+        # Provider tokens are pulumi:providers:<providerName>
+        type: pulumi:providers:lhandl-test
+        # If your Python provider needs config, put it under 'properties'
         properties: {}
+        # Tell Pulumi where & what version to download for this provider plugin
+        options:
+          version: 0.1.0
+          pluginDownloadURL: github://api.github.com/<org>/<lhandl-test-repo>
+
+      # 2) Use the provider-backed component from the Python plugin
+      hello:
+        type: lhandl-test:index:HelloWorld
+        properties:
+          who: ${args.who}
+        options:
+          provider: ${helloProv}
+
     outputs:
       greeting: ${hello.greeting}
+
