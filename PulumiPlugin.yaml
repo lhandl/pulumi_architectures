@@ -1,14 +1,18 @@
+# ../lhandl-architectures/PulumiPlugin.yaml
 runtime: yaml
 name: lhandl-architectures
 
 components:
   Architecture:
     description: Top-level architecture component
-    inputProperties:
+
+    # ✅ YAML component inputs: a map of inputs (NOT JSON Schema)
+    inputs:
       who:
         type: string
         description: Optional name to greet
-        # default: "world"   # optional; you can add a default if you like
+        # default: world   # uncomment if you want it optional without passing
+
     resources:
       helloProv:
         type: pulumi:providers:lhandl-test
@@ -20,7 +24,7 @@ components:
       hello:
         type: lhandl-test:index:HelloWorld
         properties:
-          who: ${args.who}         # <-- use the input
+          who: ${args.who}
         options:
           provider: ${helloProv}
 
