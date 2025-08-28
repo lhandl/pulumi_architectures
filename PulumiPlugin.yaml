@@ -1,0 +1,18 @@
+runtime: yaml
+name: lhandl-architectures
+
+packages:
+  lhandl-test:
+    source: ../lhandl-test
+    version: 0.0.1
+
+components:
+  Architecture:
+    # No inputs for now
+    resources:
+      hello:
+        # Instantiate the Python component from lhandl-test
+        type: lhandl-test:index:HelloWorld
+        properties: {}
+    outputs:
+      greeting: ${hello.greeting}
